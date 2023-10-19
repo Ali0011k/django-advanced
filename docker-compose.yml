@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  django-advanced:
+    container_name: django-advanced
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SECRET_KEY=django-insecure-^yuk=qx+g+v+*!ky_3)swtynp02@=5dvi=wq_okitphpj#f3r6
+      - DEBUG=True
+    
