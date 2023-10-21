@@ -6,9 +6,9 @@ from accounts.models import *
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     model = User
-    list_display = ['email', 'is_superuser', 'is_active']
+    list_display = ['email', 'is_superuser', 'is_staff', 'is_active']
     ordering = ['email']
-    list_filter = ['email', 'is_superuser', 'is_active']
+    list_filter = ['is_superuser', 'is_staff', 'is_active']
     search_fields = ['email']
     fieldsets = (
         (
