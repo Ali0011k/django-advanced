@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
+    "rest_framework",
+    "django_filters"
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # costum user settings
 
 AUTH_USER_MODEL = "accounts.User"
+
+# rest framework settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    # for rest framework default documentation
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}

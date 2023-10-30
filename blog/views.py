@@ -10,6 +10,7 @@ from django.views.generic import CreateView
 from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from blog.forms import *
 from blog.models import *
 # class based views
@@ -27,7 +28,7 @@ class RedirectToIndexView(RedirectView):
     pattern_name = 'blog:cbv-index'
     
     
-class PostList(PermissionRequiredMixin, ListView):
+class PostList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     # model = Post
     permission_required = ('blog.view_post')
     queryset = Post.objects.filter(status = True)
@@ -36,7 +37,7 @@ class PostList(PermissionRequiredMixin, ListView):
     context_object_name = 'posts'
     template_name = 'blog/postlist.html'
     
-class PostDetail(PermissionRequiredMixin, DetailView):
+class PostDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Post
     permission_required = ('blog.view_post')
     context_object_name = 'post'
@@ -44,11 +45,11 @@ class PostDetail(PermissionRequiredMixin, DetailView):
     pk_url_kwarg = 'pk'
     
     
-class CreatePost(PermissionRequiredMixin, FormView):
+class CreatePost(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     template_name = "blog/create_post.html"
     form_class = CreatePostForm
     success_url = '/blog/posts/cbv/'
-    permission_required = ('blog.view_post')
+    permission_required = ('blog.add_post')
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
@@ -63,18 +64,20 @@ class CreatePostView(CreateView):
         return super().form_valid(form)
 
 
-class UpdatePostView(UpdateView):
+class UpdatePostView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     template_name = 'blog/update_post.html'
     fields = ['category', 'title', 'content', 'status', 'published_time']
+    permission_required = ('blog.change_post')
     def get_success_url(self):
         url = self.request.path.replace('/update/', '')
         return f'{url}'
 
-class DeletePostView(DeleteView):
+class DeletePostView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Post
     success_url = '/blog/posts/cbv/'
     template_name = 'blog/post_confirm_delete.html'
+    permission_required = ('blog.delete_post')
 
     
 def postlist(request):

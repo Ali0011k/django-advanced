@@ -17,6 +17,7 @@ class Category(models.Model):
 class Post(models.Model):
     author = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     status = models.BooleanField()
@@ -27,7 +28,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
-    
+    def get_content_shorted(self):
+        return str(self.content[0:10])
     
 @receiver(post_save, sender=Category)
 def create_first_post(sender, instance, created, **kwargs):
