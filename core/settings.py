@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
     "rest_framework",
-    "django_filters"
+    "django_filters",
+    "drf_yasg"
 ]
 
 MIDDLEWARE = [
@@ -79,11 +80,16 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB', cast=str),
+        'USER': config('POSTGRES_USER', cast=str),
+        'PASSWORD': config('POSTGRES_PASSWORD', cast=str),
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
