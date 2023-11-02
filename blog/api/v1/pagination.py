@@ -6,6 +6,4 @@ class PostPagination(pagination.PageNumberPagination):
     max_page_size = 100
     
     def get_paginated_response(self, data):
-        return Response(
-            data
-        )
+        return Response(data)
