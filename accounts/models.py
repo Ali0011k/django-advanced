@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import *
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 class CostumUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
@@ -11,6 +10,7 @@ class CostumUserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+    
     
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
@@ -54,12 +54,3 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.email
-    
-    
-# a signal for creating Profile when User is created
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(
-            user=instance
-        )

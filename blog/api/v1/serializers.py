@@ -8,17 +8,31 @@ from accounts.models import Profile
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """ a serializer for category model """
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ['id', 'name']
 
 
 class PostSerializer(serializers.ModelSerializer):
     """ a serializer for post model """
     short_content = serializers.URLField(source='get_content_shorted', read_only=True)
+    category = CategorySerializer().data
     class Meta:
         model = Post
-        fields = '__all__'
+        
+        fields = [
+            'id',
+            'title',
+            'short_content',
+            'content',
+            'image',
+            'author',
+            'category',
+            'status',
+            'published_at'
+        ]
+        
         read_only_fields = ['author', 'short_content']
         
     
@@ -27,5 +41,15 @@ class PostSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request.parser_context.get('kwargs'):
             pre.pop('short_content')
-        pre['category'] = CategorySerializer(instance=instance.category, context={'request':request}).data
-        return pre 
+        else:
+            pre.pop('content')
+        
+        return pre    
+    
+    
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['author_id'] = request.user.id
+        return super().create(validated_data)
+    
+    

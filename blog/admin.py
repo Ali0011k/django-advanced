@@ -24,8 +24,8 @@ class CategoryAdmin(admin.ModelAdmin):
     
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'status', 'created_time']
-    list_filter = ['status', 'created_time']
+    list_display = ['title', 'status', 'created_at']
+    list_filter = ['status', 'created_at']
     fieldsets = (
         (
             'Genaral',{
@@ -34,7 +34,7 @@ class PostAdmin(admin.ModelAdmin):
         ),
         (
             'Important Times',{
-                'fields':('published_time',)
+                'fields':('published_at',)
             }
         )
     )
@@ -46,7 +46,7 @@ class PostAdmin(admin.ModelAdmin):
         ),
         (
             'Important Times',{
-                'fields':('published_time',)
+                'fields':('published_at',)
             }
         )
     )
