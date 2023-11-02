@@ -18,6 +18,8 @@ class UserModelViewSet(ModelViewSet):
     search_fields = ['email']
     ordering_fields = ['id', 'is_active', 'is_staff', 'is_superuser']
     pagination_class = UserPagination
+    
+    
 
 
 class ProfileModelViewSet(ModelViewSet):

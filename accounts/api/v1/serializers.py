@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     """ a model serializer for profile model """
+    user = UserSerializer()
     class Meta:
         model = Profile
         fields = [
@@ -37,8 +38,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
 
-    def to_representation(self, instance):
-        pre = super().to_representation(instance)
-        request = self.context.get('request')
-        pre['user'] = UserSerializer(instance.user, context={'request':request}).data
-        return pre
+    # def to_representation(self, instance):
+    #     pre = super().to_representation(instance)
+    #     request = self.context.get('request')
+    #     pre['user'] = UserSerializer(instance.user, context={'request':request}).data
+    #     return pre
