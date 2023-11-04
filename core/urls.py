@@ -30,9 +30,8 @@ from drf_spectacular.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path("accounts/", include("django.contrib.auth.urls")),
     path("blog/", include('blog.urls')),
-    path('', include('accounts.urls')),
+    path('accounts/', include('accounts.urls')),
     path('swagger/', SpectacularSwaggerView.as_view(), name='swagger'),
     path('redoc/', SpectacularRedocView.as_view(), name='redoc'),
     path('schema/', SpectacularAPIView.as_view(), name='schema')
