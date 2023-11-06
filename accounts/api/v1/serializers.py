@@ -1,9 +1,11 @@
+from typing import Any, Dict
 from rest_framework import serializers
 from accounts.models import *
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     """ a model serailzer for user model """
@@ -88,3 +90,23 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """ custom serializer for creating or getting an jwt """
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+        data = super().validate(attrs)
+        data['email'] = self.user.email
+        return data
+    
+    
+class ChangePasswordSerializer(serializers.Serializer):
+    """ a serializer for change user's password """
+    old_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
+    
+    def validate(self, attrs):
+        if attrs['new_password1'] != attrs['new_password2']:
+            raise ValidationError({'new_passwords':'passwords are does not match'})
+        return super().validate(attrs)
