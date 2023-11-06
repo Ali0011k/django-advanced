@@ -12,7 +12,7 @@ class UserPagination(PageNumberPagination):
 
 
 class ProfilePagination(PageNumberPagination):
-    """ a pagination for user views """
+    """ a pagination for profile views """
     page_size = 2
     max_page_size = 100
     
