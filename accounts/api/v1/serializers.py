@@ -3,7 +3,7 @@ from rest_framework import serializers
 from accounts.models import *
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
-from django.core.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -99,12 +99,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['email'] = self.user.email
         return data
     
-    
+
 class ChangePasswordSerializer(serializers.Serializer):
-    """ a serializer for change user's password """
-    old_password = serializers.CharField(required=True)
-    new_password1 = serializers.CharField(required=True)
-    new_password2 = serializers.CharField(required=True)
+    """ a serializer for changing user's password """
+    old_password = serializers.CharField(required = True)
+    new_password1 = serializers.CharField(required = True)
+    new_password2 = serializers.CharField(required = True)
     
     def validate(self, attrs):
         if attrs['new_password1'] != attrs['new_password2']:

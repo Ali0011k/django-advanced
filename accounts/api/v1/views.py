@@ -57,7 +57,7 @@ class CustomGetAuthToken(ObtainAuthToken):
         
 
 class UpdateAuthToken(APIView):
-    """ delete users token and replace it with a new token """
+    """ delete user's token and replace it with a new token """
     permission_classes = [IsAuthenticated]
     def post(self, request):
         user = request.user
@@ -75,30 +75,32 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         
 
 class ChangePassword(generics.GenericAPIView):
-    """ a view for change user's password """
+    """ a view for changing user's password """
+    serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = [IsAuthenticated]
-    serializer_class = ChangePasswordSerializer
     
     def get_object(self):
-        """ get user from request instead of queryparams id """
+        """ getting user from request instead of url query params """
         obj = self.request.user
         return obj
     
     
     def put(self, request, *args, **kwargs):
+        """ updateing user's password """
         serializer = self.serializer_class(data=request.data)
         self.object = self.get_object()
+        
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get('old_password')):
-                raise ValidationError({'old_password':'password does not correct'})
+                return Response({'old_password':'password does not correct'}, status=status.HTTP_400_BAD_REQUEST)
             try:
-                validate_password(serializer.data.get('new_password1'))
+                validate_password(serializer.data.get('new_password1'),self.object)
             except DjangoValidationError as e:
-                return Response(list(e.messages))
+                return Response({'detail':list(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
+            
             self.object.set_password(serializer.data.get('new_password1'))
             self.object.save()
-            return Response({
-                'detail':'password reset successfuly'
-            }, status=status.HTTP_200_OK)
+            return Response({'detail':'password has been changed'}, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
