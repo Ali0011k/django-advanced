@@ -112,3 +112,34 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['new_password1'] != attrs['new_password2']:
             raise ValidationError({'new_passwords':'passwords are does not match'})
         return super().validate(attrs)
+    
+    
+class VerifyUserSerializer(serializers.Serializer):
+    """ a serializer for verify user """
+    email = serializers.CharField(
+        label=_("Email"),
+        write_only=True
+    )
+    password = serializers.CharField(
+        label=_("Password"),
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        write_only=True
+    )
+
+    def validate(self, attrs):
+        username = attrs.get('email')
+        password = attrs.get('password')
+
+        if username and password:
+            user = authenticate(request=self.context.get('request'),
+                                username=username, password=password)
+            if not user:
+                msg = _('Unable to log in with provided credentials.')
+                raise serializers.ValidationError(msg, code='authorization')
+        else:
+            msg = _('Must include "username" and "password".')
+            raise serializers.ValidationError(msg, code='authorization')
+
+        attrs['user'] = user
+        return attrs

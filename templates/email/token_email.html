@@ -1,0 +1,11 @@
+{% extends "mail_templated/base.tpl" %}
+
+{% block subject %}
+Hello {{email}}
+{% endblock %}
+
+{% block html %}
+<h1>your verification email</h1>
+follow this link to verify your account: <br>
+<a href="{{link}}">{{link}}</a>
+{% endblock %}

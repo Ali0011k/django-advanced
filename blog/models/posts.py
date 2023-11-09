@@ -1,6 +1,6 @@
 from django.db import models
-
 from .categories import *
+
 class Post(models.Model):
     author = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)

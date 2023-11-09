@@ -16,9 +16,11 @@ router.register('profile', ProfileModelViewSet, basename='profile')
 
 urlpatterns = [
     path('', include(router.urls), name='accounts-urls'),
+    
     # token authentication
     path('get_auth_token/', CustomGetAuthToken.as_view()),
     path('update_auth_token/', UpdateAuthToken.as_view()),
+    
     # jwt authentication
     # path('jwt/create/', TokenObtainPairView.as_view(), name='jwt-create'),
     path('jwt/create/', CustomTokenObtainPairView.as_view(), name='jwt-create'),
@@ -30,5 +32,7 @@ urlpatterns = [
     
     path('test-email/', SendTestEmail.as_view(), name='console-email'),
     
-    
+    # verify email
+    path('send-verification-email/', SendVerificationEmailApiView.as_view(), name='send-verification-email'),
+    path('verify-account/<str:token>', VerifyAccount.as_view(), name='verify-account')
 ]

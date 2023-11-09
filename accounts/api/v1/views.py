@@ -15,7 +15,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.core.mail import send_mail
+from django.conf import settings
+from mail_templated import send_mail
+from mail_templated import EmailMessage
+from accounts.api.utils import *
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import *
+import jwt
+
 class UserModelViewSet(ModelViewSet):
     """ a model view set for user model """
     queryset = User.objects.all()
@@ -113,13 +120,61 @@ class SendTestEmail(generics.GenericAPIView):
     serializer_class = None
     
     def get(self, request, *args, **kwargs):
-        send_mail(
-            'email sent',
-            'this is test message',
-            'django_advanced@gmail.com',
-            ['kly441781@gmail.com'],
-            fail_silently = False
-        )
+        # send_mail('email/mail.html', {'name': 'ali'}, 'admin@admin.com', ['test@test.com'])
+        email = EmailMessage('email/mail.html', {'name': 'ali'}, 'admin@admin.com', to=['test@test.com'])
+        # email.send()
+        SendEmailThread(email=email).start
+        
+        
+        
         return Response({
-                'details':'email sent'
+                'details':'email sent',
             })
+        
+        
+class SendVerificationEmailApiView(generics.GenericAPIView):
+    """ sends email Verification for user """
+    serializer_class = VerifyUserSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data.get('user')
+        token = self.get_token_for_user(user=user)
+        link = str(request.build_absolute_uri().replace('send-verification-email/', 'verify-account/') + token)
+        
+        email = EmailMessage('email/token_email.html', {'name' : user, 'link': link}, 'admin@admin.com', to=['test@test.com'])
+        email.send()
+        return Response({
+            'detail':'email sent',
+            'email' : user.email
+        })
+
+    
+    @classmethod
+    def get_token_for_user(self, user):
+        token = RefreshToken.for_user(user)
+        return str(token.access_token)
+    
+    
+class VerifyAccount(APIView):
+    """ verifys account with given json web token """
+    def get(self, request, token, *args, **kwargs):
+        try: 
+            decoded_token = jwt.decode(
+                token,
+                settings.SIMPLE_JWT['SIGNING_KEY'],
+                settings.SIMPLE_JWT['ALGORITHM'],
+            )
+        except:
+            return Response({'detail':'your token is invalid or expierd'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user = User.objects.get(pk = decoded_token.get('user_id'))
+        
+        if user.is_verified:
+            return Response({'detail':'your account already verified'})
+        
+        user.is_verified = True
+        user.save()
+        
+        return Response({'detail':'your account has been verified'})
