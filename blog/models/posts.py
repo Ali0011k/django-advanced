@@ -1,12 +1,6 @@
 from django.db import models
 
-class Category(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __str__(self):
-        return self.name
-    
-    
+from .categories import *
 class Post(models.Model):
     author = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
@@ -23,6 +17,3 @@ class Post(models.Model):
     
     def get_content_shorted(self):
         return str(self.content[0:10])
-
-
-
