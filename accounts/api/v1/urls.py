@@ -28,6 +28,7 @@ urlpatterns = [
     # change password
     path('change_password/', ChangePassword.as_view(), name='change-password'),
     
+    path('test-email/', SendTestEmail.as_view(), name='console-email'),
     
     
 ]

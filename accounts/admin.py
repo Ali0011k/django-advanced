@@ -18,7 +18,7 @@ class CustomUserAdmin(UserAdmin):
         ),
         (
             'Permissions',{
-                'fields':('is_superuser', 'is_staff', 'is_active')
+                'fields':('is_superuser', 'is_staff', 'is_active', 'is_verified')
             }
         ),
         (
@@ -40,7 +40,7 @@ class CustomUserAdmin(UserAdmin):
         ),
         (
             'Permissions',{
-                'fields':('is_superuser', 'is_staff', 'is_active')
+                'fields':('is_superuser', 'is_staff', 'is_active', 'is_verified')
             }
         ),
         (

@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.mail import send_mail
 class UserModelViewSet(ModelViewSet):
     """ a model view set for user model """
     queryset = User.objects.all()
@@ -104,3 +105,21 @@ class ChangePassword(generics.GenericAPIView):
             return Response({'detail':'password has been changed'}, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+class SendTestEmail(generics.GenericAPIView):
+    """ sends console email """
+    serializer_class = None
+    
+    def get(self, request, *args, **kwargs):
+        send_mail(
+            'email sent',
+            'this is test message',
+            'django_advanced@gmail.com',
+            ['kly441781@gmail.com'],
+            fail_silently = False
+        )
+        return Response({
+                'details':'email sent'
+            })
