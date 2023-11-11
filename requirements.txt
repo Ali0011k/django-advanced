@@ -20,3 +20,4 @@ rpds-py==0.10.6
 sqlparse==0.4.4
 uritemplate==4.1.1
 black==23.11.0
+flake8==6.1.0
