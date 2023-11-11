@@ -7,10 +7,10 @@ from rest_framework.routers import DefaultRouter
 # router.register('post', PostViewSet, basename='post')
 
 router = DefaultRouter()
-router.register('post', PostModelViewSet, basename='post')
-router.register('category', CategoryModelViewSet, basename='category')
+router.register("post", PostModelViewSet, basename="post")
+router.register("category", CategoryModelViewSet, basename="category")
 
-app_name = 'blog-api-v1'
+app_name = "blog-api-v1"
 
 urlpatterns = [
     # path('posts/', post_list_view, name='post-list'),
@@ -30,5 +30,5 @@ urlpatterns = [
     #         'delete' : 'destroy'
     #     }
     #     ), name='post-viewset'),
-    path('', include(router.urls), name='blog-router')
+    path("", include(router.urls), name="blog-router")
 ]

@@ -18,29 +18,27 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
 # for rest framework default documentation
 # from rest_framework.documentation import include_docs_urls
 from rest_framework import permissions
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
-    SpectacularRedocView
+    SpectacularRedocView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path("blog/", include('blog.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('swagger/', SpectacularSwaggerView.as_view(), name='swagger'),
-    path('redoc/', SpectacularRedocView.as_view(), name='redoc'),
-    path('schema/', SpectacularAPIView.as_view(), name='schema')
-    
+    path("api-auth/", include("rest_framework.urls")),
+    path("blog/", include("blog.urls")),
+    path("accounts/", include("accounts.urls")),
+    path("swagger/", SpectacularSwaggerView.as_view(), name="swagger"),
+    path("redoc/", SpectacularRedocView.as_view(), name="redoc"),
+    path("schema/", SpectacularAPIView.as_view(), name="schema")
     # for rest framework default documentation
     # path('api-docs/', include_docs_urls(title='api sample docs'))
-
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
