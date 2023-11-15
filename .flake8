@@ -10,6 +10,7 @@ exclude =
     env,
     .env,
     __init__,
+    migrations,
 
 ignore = 
     E501,

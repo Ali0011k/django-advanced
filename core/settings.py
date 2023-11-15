@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", cast=str)
+SECRET_KEY = config("SECRET_KEY", cast=str, default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool)
+DEBUG = config("DEBUG", cast=bool, default=True)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")], default="*"
@@ -88,9 +88,9 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB", cast=str),
-        "USER": config("POSTGRES_USER", cast=str),
-        "PASSWORD": config("POSTGRES_PASSWORD", cast=str),
+        "NAME": config("POSTGRES_DB", cast=str, default="test"),
+        "USER": config("POSTGRES_USER", cast=str, default="test"),
+        "PASSWORD": config("POSTGRES_PASSWORD", cast=str, default="test"),
         "HOST": "db",
         "PORT": "5432",
     }
@@ -191,3 +191,6 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
+
+# tests
+TEST_RUNNER = "core.tests.runner.TestRunner"

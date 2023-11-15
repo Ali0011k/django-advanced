@@ -44,6 +44,23 @@ services:
     env_file:
       - .env
 
+  testing:
+    depends_on:
+      - db
+      - django-advanced
+    container_name: testing
+    command: python manage.py test 
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+
 
 
 

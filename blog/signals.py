@@ -1,5 +1,6 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from decouple import config
 from blog.models import *
 from django.utils import timezone
 from accounts.models import *
@@ -11,7 +12,7 @@ def create_first_post(sender, instance, created, **kwargs):
     if created:
         Post.objects.create(
             author=Profile.objects.get(
-                user=User.objects.get(email="kly441781@gmail.com")
+                user=User.objects.get(email=config("EMAIL", cast=str))
             ),
             category=instance,
             title=f"first post for {instance} category",

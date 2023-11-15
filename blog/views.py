@@ -11,6 +11,7 @@ from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.models import *
 from blog.forms import *
 from blog.models import *
 
