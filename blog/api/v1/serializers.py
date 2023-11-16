@@ -19,7 +19,6 @@ class PostSerializer(serializers.ModelSerializer):
     """a serializer for post model"""
 
     short_content = serializers.URLField(source="get_content_shorted", read_only=True)
-    category = CategorySerializer()
 
     class Meta:
         model = Post
@@ -45,6 +44,9 @@ class PostSerializer(serializers.ModelSerializer):
             pre.pop("short_content")
         else:
             pre.pop("content")
+        pre["category"] = CategorySerializer(
+            instance=instance.category, context={"request": request}
+        ).data
 
         return pre
 
