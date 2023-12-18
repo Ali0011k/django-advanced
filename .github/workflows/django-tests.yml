@@ -14,6 +14,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Create env file
+        run: |
+          touch .env
+          echo SECRET_KEY=django-insecure-^yuk=qx+g+v+*!ky_3)swtynp02@=5dvi=wq_okitphpj#f3r6 >> .env
+          echo DEBUG=False >> .env
+          echo POSTGRES_PASSWORD=test >> .env
+          echo POSTGRES_USER=testuser >> .env
+          echo POSTGRES_DB=testdb >> .env
+          echo EMAIL=test1@gmail.com >> .env
+          echo DJANGO_SUPERUSER_PASSWORD = test@123456 >> .env
+          
+          cat .env
     - name: Build Docker Compose file
       run: docker-compose up -d --build
     - name: Run Tests
