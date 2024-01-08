@@ -60,9 +60,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
-
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - cache:/data
+    container_name: redis
+    depends_on:
+      - django-advanced
 
 
 volumes:
   smtp4dev-data:
+  cache:

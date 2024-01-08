@@ -11,9 +11,11 @@ from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from accounts.models import *
 from blog.forms import *
 from blog.models import *
+from django.views.decorators.cache import cache_page
 
 
 # class based views
@@ -103,3 +105,14 @@ def postlist(request):
             "page_obj": page_obj,
         },
     )
+
+
+@cache_page(60)
+def test(request):
+    # if cache.get("posts") is None:
+    #     all_posts = Post.objects.all()
+    #     cache.set("posts", all_posts)
+    # return HttpResponse(cache.get("posts"))
+    #! better way
+    all_posts = Post.objects.all()
+    return HttpResponse(all_posts)

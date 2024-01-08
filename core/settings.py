@@ -194,3 +194,16 @@ EMAIL_HOST_PASSWORD = ""
 
 # tests
 TEST_RUNNER = "core.tests.runner.TestRunner"
+
+
+# cache
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
